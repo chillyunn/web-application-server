@@ -16,6 +16,8 @@
 
 ### 요구사항 1 - http://localhost:8080/index.html로 접속시 응답
 * BufferdReader
+* byte[] body = Files.readAllBytes(new File("./webapp" + url).toPath()); 사용시 경로가 최상위 폴더에서 시작됨.<br>
+왜 현재 폴더에서 시작되지 않을까?
 * slf4j를 사용한 로깅
 * HTTP 요청메시지와 응답메시지
 * 요청메시지는 요청라인 - 요청헤더 - 공백 - 요청본문으로 구성됨
@@ -24,7 +26,8 @@
 * /index.html 요청시 서버는 HTML만 전달하고 클라이언트가 HTML 내용을 분석해 CSS,JS 등이 포함되어있으면 서버에 해당 자원을 다시 요청한다.
 
 ### 요구사항 2 - get 방식으로 회원가입
-* 
+* indexOf("?")와 subString(index+1)을 이용한 쿼리스트링 분리
+* queryString을 받을 때, @이 이상하게 입력되는 현상 발생
 
 ### 요구사항 3 - post 방식으로 회원가입
 * 
