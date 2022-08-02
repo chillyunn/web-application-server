@@ -27,6 +27,7 @@
 
 ### 요구사항 2 - get 방식으로 회원가입
 * indexOf("?")와 subString(index+1)을 이용한 쿼리스트링 분리
+* indexOf의 seperator가 없을 때 -1이 return 됨.
 * queryString을 받을 때, @이 이상하게 입력되는 현상 발생
 
 ### 요구사항 3 - post 방식으로 회원가입
