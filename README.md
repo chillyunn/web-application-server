@@ -55,8 +55,31 @@
 * 클라이언트도 Set-Cookie를 통해 결과 값을 저장할 수 있다.
 * HTTP는 헤더를 통해 공유할 데이터를 매번 다시 전송하는 방식으로 데이터를 공유한다.
 
-### 요구사항 6 - stylesheet 적용
-* 
+### 요구사항 6 - 사용자 목록 출력
+* 로그인을 했을 때, 응답헤더에서 Set-Cookie:logined=true를 작성하면 클라이언트는 cookie:logined=true를 갖게된다.
+* 사용자 목록 요청을 하게되었을때 서버는 클라이언트의 cookie 값을 확인하여 로그인 여부를 확인하게된다.
+* 사용자 목록을 출력하는 과정에서 StringBuilder를 사용하였는데, String은 변경이 불가능하기때문에, 문자열을 연결할 경우에 새 문자열을 생성하게되고, 이전 문자열은 GC로 돌아간다.
+* 만약 많은 수의 문자열 연결이 발생할 경우, 이는 메모리 사용량을 증가시킨다.
+* StringBuilder는 변경 가능한 문자열을 만들어 주기 때문에, String의 대안이 될 수 있다.
+* StringBuffer 또한 비슷한 기능을 가지고 있는데, StringBuffer는 동기화를 지원하지만, StringBuilder는 동기화를 지원하지 않는다.
+* 때문에 멀티스레드 환경에서는 StringBuffer를 사용하는 것이 좋다.
+* 하지만 멀티스레드 환경이 아닐 때는 일반적으로 StringBuilder가 StringBuffer보다 속도 면에서 성능이 좋다.
+* 알지 못한것:Collection<T>
+### 요구사항 7 - stylesheet 적용
+* 처음 프로그램을 실행했을 때부터 css가 적용되지 않는 이유가 궁금했었는데, 200 응답을 보내는 코드에서 Content-Type이 text/html로 고정되어있었기 때문에, css 요청에 대한 응답을 하더라도 브라우저가 css를 읽을 수 없었다.
+* Response200CssHeader() 메소드를 통해서 Content-Type을 html/css로 변경하고 재실행 하였는데, css가 적용되지 않았다.
+* 원본 깃허브에 있는 코드와 비교했을 때, Response200CssHeader() 메소드에 Content-Type을 설정하는 곳에서, 책에는 charset을 설정하는 부분이 없었는데, 원본 깃허브에는 적용되어 있다는 사실을 인지하고 수정하여 재실행했더니 css가 적용되었다.
 
 ### heroku 서버에 배포 후
-* 
+
+### maven
+* https://slipp.net/wiki/pages/viewpage.action?pageId=10420233
+### 그래들 학습
+* http://kwonnam.pre.kr/wiki/gradle
+### HTTP 학습
+* https://www3.ntu.edu.sg/home/ehchua/programming/webprogramming/HTTP_Basics.html
+* 프로가 되기 위한 웹 기술 입문(고모리 유스케,위키북스/2012) ~3장
+* HTTP & Network : 그림으로 배우는 책으로 학습(우에노 센,영진닷컴/2015)
+* HTTP 완벽 가이드(데이빗 고울리,인사이트/2014)
+### 네트워크
+* 성공과 실패를 결정하는 1%의 네트워크 원리(Tsutomu Tone/성안당/2015)
