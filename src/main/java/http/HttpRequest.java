@@ -19,25 +19,34 @@ public class HttpRequest {
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
             String line = br.readLine();
-            if (line == null)
-                return;
-            String[] tokens = line.split(" ");
+            nullCheck(line);
             int contentLength = 0;
+            String[] tokens = line.split(" ");
+
             String[] url = tokens[1].split("/?");
             path = url[0];
             String[] queryString= url[1].split("&");
             parameter.put(queryString[0],queryString[1]);
-            while (!line.equals("")) {
-                line = br.readLine();
-                log.debug("header: {}", line);
-                tokens = line.split(":");
-                header.put(tokens[0], tokens[1]);
-            }
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
-
+    public void getHeader(String line){
+        while (!line.equals("")) {
+            line = br.readLine();
+            log.debug("header: {}", line);
+            tokens = line.split(":");
+            header.put(tokens[0], tokens[1]);
+        }
+    }
+    private void nullCheck(String line){
+        if(line == null)
+            return;
+    }
+    public String[] split(String string,String regex){
+        return string.split("regex");
+    }
     public String getMethod() {
         return method;
     }
