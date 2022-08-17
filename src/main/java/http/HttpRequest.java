@@ -2,6 +2,7 @@ package http;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import util.HttpRequestUtils;
 
 import java.io.*;
 import java.util.HashMap;
@@ -25,7 +26,9 @@ public class HttpRequest {
             method = tokens[0];
             int contentLength = 0;
             String[] url = tokens[1].split("\\?");
+            boolean logined = false;
             path = url[0];
+
             String[] queryString = url[1].split("\\&");
             for(String val:queryString){
                 parameter.put(val.split("=")[0],val.split("=")[1]);
@@ -33,6 +36,12 @@ public class HttpRequest {
 
             while ((line=br.readLine()) !=null) {
                 log.debug("header: {}", line);
+                if(line.contains("Content-Length")){
+                    contentLength = getContentLength(line);
+                }
+                if (line.contains("Cookie")) {
+                    logined = isLogin(line);
+                }
                 tokens = line.split(":");
                 header.put(tokens[0],tokens[1].trim());
             }
@@ -40,6 +49,12 @@ public class HttpRequest {
             throw new RuntimeException(e);
         }
     }
+
+    private int getContentLength(String line) {
+        String[] headerTokens = line.split(":");
+        return Integer.parseInt(headerTokens[1].trim());
+    }
+
     public String getMethod() {
         return method;
     }
@@ -54,5 +69,14 @@ public class HttpRequest {
 
     public String getParameter(String key) {
         return parameter.get(key);
+    }
+    private boolean isLogin(String line) {
+        String[] headerTokens = line.split(":");
+        Map<String, String> cookies = HttpRequestUtils.parseCookies(headerTokens[1].trim());
+        String value = cookies.get("logined");
+        if (value == null) {
+            return false;
+        }
+        return Boolean.parseBoolean(value);
     }
 }
